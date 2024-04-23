@@ -14,17 +14,21 @@ files({
 
 includedirs({
     "../Base/source",
-    "../vendor/%{cfg.system}/glad/include",
+    "../vendor/glad/include",
+    "../vendor/imgui/include",
 })
 
 libdirs({
-    "../vendor/%{cfg.system}/glad/bin",
+    "../vendor/glad/bin",
+    "../vendor/imgui/lib/%{cfg.system}",
 })
 
 links({
     "Maylib-Base",
     "glad",
     "SDL2",
+    "ImGui",
+    "ImGui_SDL2_GL3",
 })
 
 postbuildcommands({

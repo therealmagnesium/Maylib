@@ -16,8 +16,11 @@ namespace Maylib
             ~Window();
 
             inline bool ShouldClose() { return m_closed; }
+            inline void Close() { m_closed = true; }
 
             void HandleEvents();
+            void Clear(float r, float g, float b);
+            void Display();
 
         private:
             bool m_closed = false;

@@ -8,22 +8,26 @@ targetdir("../bin/" .. outputdir .. "/%{prj.name}")
 objdir("../build/" .. outputdir .. "/%{prj.name}")
 
 files({
-	"source/**.h",
-	"source/**.cpp",
+    "source/**.h",
+    "source/**.cpp",
 })
 
 includedirs({
-	"source",
-	"../vendor/%{cfg.system}/glad/include",
+    "source",
+    "../vendor/glad/include",
+    "../vendor/imgui/include",
 })
 
 libdirs({
-	"../vendor/%{cfg.system}/glad/bin",
+    "../vendor/glad/bin",
+    "../vendor/imgui/lib/%{cfg.system}",
 })
 
 links({
-	"glad",
-	"SDL2",
+    "glad",
+    "SDL2",
+    "ImGui",
+    "ImGui_SDL2_GL3",
 })
 
 filter("system:linux")
@@ -31,7 +35,7 @@ system("linux")
 cppdialect("C++17")
 systemversion("latest")
 defines({
-	"PLATFORM_LINUX",
+    "PLATFORM_LINUX",
 })
 
 filter({ "configurations:Debug" })
