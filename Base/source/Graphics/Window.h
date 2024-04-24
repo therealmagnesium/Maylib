@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Core/Base.h>
-
 #include <SDL2/SDL_video.h>
 #include <string>
 
@@ -12,15 +11,17 @@ namespace Maylib
         class Window
         {
         public:
+            Window() = default;
             Window(u32 width, u32 height, const std::string& title);
             ~Window();
 
             inline bool ShouldClose() { return m_closed; }
             inline void Close() { m_closed = true; }
 
-            void HandleEvents();
+            void Create(u32 width, u32 height, const std::string& title);
             void Clear(float r, float g, float b);
             void Display();
+            void HandleEvents();
 
         private:
             bool m_closed = false;

@@ -39,13 +39,15 @@ then
 elif [[ $config = "clean" ]]
 then
     rm -rf bin build
+	rm -rf vendor/glad/bin vendor/glad/build
     rm Makefile
     rm Base/Makefile
     rm App/Makefile
+	rm vendor/glad/Makefile vendor/glad/glad.make
 else
     system="$2"
     "./vendor/premake/$system/premake5" export-compile-commands
     "./vendor/premake/$system/premake5" gmake
-    make all config=$config -j4
+    make all config=$config -j7
     cp "compile_commands/$config.json" "compile_commands.json"
 fi

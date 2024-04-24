@@ -1,26 +1,19 @@
-#include <Core/Base.h>
-#include <Core/Log.h>
-#include <Core/Input.h>
-#include <Graphics/Window.h>
-
-#include <SDL2/SDL_scancode.h>
+#include <Core/Application.h>
 
 using namespace Maylib;
+using namespace Maylib::Core;
 using namespace Maylib::Graphics;
 
 int main(int argc, char* argv[])
 {
-    Window window(1280, 720, "Maylib App");
+    AppInfo info;
+    info.name = "Maylib App";
+    info.author = "Magnus Ahlstromer V";
+    info.screenWidth = 1280;
+    info.screenHeight = 720;
 
-    while (!window.ShouldClose())
-    {
-        window.HandleEvents();
+    Application app(info);
+    app.Run();
 
-        if (Core::Input::IsKeyTyped(SDL_SCANCODE_ESCAPE))
-            window.Close();
-
-        window.Clear(0.08, 0.07, 0.15);
-        window.Display();
-    }
     return 0;
 }
