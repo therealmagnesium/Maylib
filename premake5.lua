@@ -7,5 +7,6 @@ configurations({
 	"Dist",
 })
 
+include("vendor/glad")
 include("Base")
 include("App")

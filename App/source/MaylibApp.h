@@ -10,7 +10,6 @@ class MaylibApp : public Application
 public:
     MaylibApp(const AppInfo& info);
 
-private:
     void OnUpdate() override;
     void OnUIRender() override;
 

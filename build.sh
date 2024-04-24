@@ -43,7 +43,7 @@ then
     rm Makefile
     rm Base/Makefile
     rm App/Makefile
-	rm vendor/glad/Makefile vendor/glad/glad.make
+	rm vendor/glad/Makefile
 else
     system="$2"
     "./vendor/premake/$system/premake5" export-compile-commands

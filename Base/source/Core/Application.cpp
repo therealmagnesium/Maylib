@@ -1,4 +1,5 @@
 #include "Core/Application.h"
+#include "Core/Log.h"
 
 namespace Maylib
 {
@@ -16,18 +17,24 @@ namespace Maylib
 
         void Application::Run()
         {
-            while (!m_window.ShouldClose())
+            while (m_running)
             {
+                m_running = !m_window.ShouldClose();
+
                 m_window.HandleEvents();
                 this->OnUpdate();
                 this->OnUIRender();
 
-                m_window.Clear(0.08f, 0.07f, 0.15f);
+                m_window.Clear(0.28f, 0.28f, 0.28f);
                 m_window.Display();
             }
         }
 
-        void Application::Quit() { m_window.Close(); }
+        void Application::Quit()
+        {
+            m_running = false;
+            m_window.Close();
+        }
 
     }
 }

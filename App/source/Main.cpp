@@ -1,4 +1,4 @@
-#include <Core/Application.h>
+#include "MaylibApp.h"
 
 using namespace Maylib;
 using namespace Maylib::Core;
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     info.screenWidth = 1280;
     info.screenHeight = 720;
 
-    Application app(info);
+    MaylibApp app(info);
     app.Run();
 
     return 0;

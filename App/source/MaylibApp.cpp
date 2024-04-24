@@ -1,5 +1,6 @@
 #include "MaylibApp.h"
 #include <Core/Input.h>
+#include <Core/Log.h>
 
 #include <SDL2/SDL_scancode.h>
 #include <imgui.h>

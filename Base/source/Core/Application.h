@@ -34,6 +34,7 @@ namespace Maylib
             virtual void OnUIRender() {}
 
         private:
+            bool m_running = true;
             Window m_window;
 
         private:

@@ -15,13 +15,13 @@ files({
 includedirs({
 	"source",
 	"../vendor/glad/include",
-	"../vendor/imgui/include",
+	"../vendor/ImGui/include",
 	"/ucrt64/include",
 })
 
 libdirs({
 	"../vendor/glad/bin",
-	"../vendor/imgui/lib/%{cfg.system}",
+	"../vendor/ImGui/lib/%{cfg.system}",
 })
 
 links({

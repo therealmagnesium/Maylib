@@ -1,6 +1,7 @@
 #include "Graphics/Window.h"
 #include "Core/Input.h"
 #include "Core/Log.h"
+#include "UI/Theme.h"
 
 #include <glad/glad.h>
 #include <SDL2/SDL.h>
@@ -14,6 +15,7 @@
 #include <string>
 
 using namespace Maylib::Core;
+using namespace Maylib::UI;
 
 namespace Maylib
 {
@@ -61,7 +63,8 @@ namespace Maylib
             io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
             io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-            ImGui::StyleColorsDark();
+            // ImGui::StyleColorsDark();
+            SetTheme();
 
             ImGui_ImplSDL2_InitForOpenGL(m_handle, glContext);
             ImGui_ImplOpenGL3_Init("#version 460");
@@ -115,7 +118,8 @@ namespace Maylib
             io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
             io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-            ImGui::StyleColorsDark();
+            // ImGui::StyleColorsDark();
+            SetTheme();
 
             ImGui_ImplSDL2_InitForOpenGL(m_handle, glContext);
             ImGui_ImplOpenGL3_Init("#version 460");
@@ -163,8 +167,6 @@ namespace Maylib
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplSDL2_NewFrame();
             ImGui::NewFrame();
-
-            ImGui::ShowDemoWindow();
         }
 
         void Window::Clear(float r, float g, float b)
