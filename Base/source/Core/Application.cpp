@@ -1,11 +1,16 @@
 #include "Core/Application.h"
 #include "Core/Log.h"
+#include <glad/glad.h>
 
 namespace Maylib
 {
     namespace Core
     {
         Application* Application::s_instance;
+
+        static float clearRedChannel;
+        static float clearGreenChannel;
+        static float clearBlueChannel;
 
         Application::Application(const AppInfo& info)
         {
@@ -23,9 +28,12 @@ namespace Maylib
 
                 m_window.HandleEvents();
                 this->OnUpdate();
-                this->OnUIRender();
 
-                m_window.Clear(0.28f, 0.28f, 0.28f);
+                if (m_debugMode)
+                    this->OnUIRender();
+
+                m_window.Clear(clearRedChannel, clearGreenChannel, clearBlueChannel);
+                this->OnRender();
                 m_window.Display();
             }
         }
@@ -36,5 +44,11 @@ namespace Maylib
             m_window.Close();
         }
 
+        void Application::SetClearColor(float r, float g, float b)
+        {
+            clearRedChannel = r;
+            clearGreenChannel = g;
+            clearBlueChannel = b;
+        }
     }
 }

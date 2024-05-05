@@ -25,16 +25,21 @@ namespace Maylib
             ~Application();
 
             static inline Application* Get() { return s_instance; }
+            inline void ToggleDebug() { m_debugMode = !m_debugMode; }
 
             void Run();
             void Quit();
 
         protected:
             virtual void OnUpdate() {}
+            virtual void OnRender() {}
             virtual void OnUIRender() {}
+
+            void SetClearColor(float r, float g, float b);
 
         private:
             bool m_running = true;
+            bool m_debugMode = false;
             Window m_window;
 
         private:

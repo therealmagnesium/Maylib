@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Base.h>
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_video.h>
 #include <string>
 
@@ -22,6 +23,10 @@ namespace Maylib
             void Clear(float r, float g, float b);
             void Display();
             void HandleEvents();
+
+        private:
+            void HandleEventTypes(const SDL_Event& event);
+            void HandleWindowEvents(const SDL_Event& event);
 
         private:
             bool m_closed = false;

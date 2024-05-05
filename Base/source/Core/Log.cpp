@@ -1,7 +1,10 @@
 #include "Core/Log.h"
 #include "Core/Base.h"
+#include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include <cstdarg>
+#include <string>
 
 namespace Maylib
 {
@@ -68,6 +71,28 @@ namespace Maylib
                 default:
                     break;
             }
+        }
+
+        std::string ReadFile(const char* path)
+        {
+            std::ifstream in(path);
+            if (!in)
+            {
+                LOG_WARN("Can't read file %s!", path);
+                return "";
+            }
+
+            std::string line;
+            std::stringstream stream;
+
+            while (std::getline(in, line))
+            {
+                stream << line << "\n";
+            }
+
+            in.close();
+
+            return stream.str();
         }
     }
 }

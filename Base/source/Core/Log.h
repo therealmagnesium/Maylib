@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Base.h"
+#include <string>
 
 #define LOG_INFO(...) Maylib::Core::Log(Maylib::Core::LOG_LEVEL_INFO, __VA_ARGS__)
 #define LOG_WARN(...) Maylib::Core::Log(Maylib::Core::LOG_LEVEL_WARN, __VA_ARGS__)
@@ -19,5 +20,6 @@ namespace Maylib
         };
 
         void Log(u8 logLevel, const char* message, ...);
+        std::string ReadFile(const char* path);
     }
 }
