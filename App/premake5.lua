@@ -15,20 +15,23 @@ files({
 includedirs({
     "../Base/source",
     "../vendor/glad/include",
+    "../vendor/stb_image/include",
     "../vendor/ImGui/include",
     "/ucrt64/include",
 })
 
 libdirs({
     "../vendor/glad/bin",
+    "../vendor/stb_image/lib",
     "../vendor/ImGui/lib/%{cfg.system}",
 })
 
 links({
     "Maylib-Base",
+    "glad",
+    "stb_image",
     "ImGui",
     "ImGui_SDL2_GL3",
-    "glad",
     "SDL2",
 })
 
