@@ -8,5 +8,6 @@ configurations({
 })
 
 include("vendor/glad")
+include("vendor/stb_image")
 include("Base")
 include("App")
