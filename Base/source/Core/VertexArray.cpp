@@ -1,4 +1,5 @@
 #include "Core/VertexArray.h"
+#include "Core/Vertex.h"
 #include <glad/glad.h>
 
 namespace Maylib
@@ -11,10 +12,11 @@ namespace Maylib
         void VertexArray::Bind() { glBindVertexArray(m_id); }
         void VertexArray::Unbind() { glBindVertexArray(0); }
 
-        void VertexArray::LinkAttribs(u8 location, u8 elementCount, void* offset)
+        void VertexArray::LinkAttribs(u8 location, u8 elementCount, u64 offset)
         {
             glEnableVertexAttribArray(location);
-            glVertexAttribPointer(location, elementCount, GL_FLOAT, false, ELEMENTS_PER_VERTEX * sizeof(float), offset);
+            glVertexAttribPointer(location, elementCount, GL_FLOAT, false, ELEMENTS_PER_VERTEX * sizeof(float),
+                                  (void*)offset);
         }
     }
 }

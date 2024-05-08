@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Core/Application.h>
-#include <Core/VertexArray.h>
-#include <Core/Buffer.h>
 
+#include <Graphics/Mesh.h>
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
 
@@ -20,10 +19,7 @@ public:
     void OnUIRender() override;
 
 private:
-    VertexArray m_vertexArray;
-    VertexBuffer m_vertexBuffer;
-    IndexBuffer m_indexBuffer;
-
+    Mesh m_mesh;
     Shader m_shader;
     Texture m_texture;
 };

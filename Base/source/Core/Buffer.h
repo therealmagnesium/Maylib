@@ -1,6 +1,6 @@
 #pragma once
-
 #include "Core/Base.h"
+#include "Core/Vertex.h"
 
 namespace Maylib
 {
@@ -14,7 +14,7 @@ namespace Maylib
 
             void Bind();
             void Unbind();
-            void SetData(float* vertices, u32 numVertices);
+            void SetData(Vertex* vertices, u32 numVertices);
 
         private:
             u32 m_id;

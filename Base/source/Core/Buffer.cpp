@@ -1,4 +1,5 @@
 #include "Core/Buffer.h"
+#include "Core/Vertex.h"
 #include <glad/glad.h>
 
 namespace Maylib
@@ -11,9 +12,9 @@ namespace Maylib
         void VertexBuffer::Bind() { glBindBuffer(GL_ARRAY_BUFFER, m_id); }
         void VertexBuffer::Unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-        void VertexBuffer::SetData(float* vertices, u32 numVertices)
+        void VertexBuffer::SetData(Vertex* vertices, u32 numVertices)
         {
-            glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(float), vertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, numVertices * ELEMENTS_PER_VERTEX * sizeof(float), vertices, GL_STATIC_DRAW);
         }
 
         IndexBuffer::IndexBuffer() { glGenBuffers(1, &m_id); }
