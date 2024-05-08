@@ -2,12 +2,12 @@ workspace("Maylib")
 architecture("x64")
 
 configurations({
-	"Debug",
-	"Release",
-	"Dist",
+    "Debug",
+    "Release",
+    "Dist",
 })
 
-include("vendor/glad")
 include("vendor/stb_image")
+include("vendor/glad")
 include("Base")
 include("App")

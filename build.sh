@@ -39,8 +39,6 @@ then
 elif [[ $config = "clean" ]]
 then
     rm -rf bin build
-	rm -rf vendor/glad/bin vendor/glad/build
-	rm -rf vendor/stb_image/bin vendor/stb_image/build
     rm Makefile
     rm Base/Makefile
     rm App/Makefile

@@ -1,11 +1,13 @@
+local outputdir = "%{cfg.buildcfg}-%{cfg.system}"
+
 project("glad")
 kind("StaticLib")
-language("C++")
-cppdialect("C++17")
+language("C")
+cdialect("C11")
 systemversion("latest")
 
-targetdir("bin/")
-objdir("build/")
+targetdir("../../bin/" .. outputdir .. "/%{prj.name}")
+objdir("../../build/" .. outputdir .. "/%{prj.name}")
 
 files({
 	"include/**.h",

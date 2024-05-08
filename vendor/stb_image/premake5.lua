@@ -1,19 +1,21 @@
+local outputdir = "%{cfg.buildcfg}-%{cfg.system}"
+
 project("stb_image")
 kind("StaticLib")
 language("C++")
 cppdialect("C++17")
 systemversion("latest")
 
-targetdir("bin/")
-objdir("build/")
+targetdir("../../bin/" .. outputdir .. "/%{prj.name}")
+objdir("../../build/" .. outputdir .. "/%{prj.name}")
 
 files({
-	"source/**.h",
-	"source/**.cpp",
+    "source/**.h",
+    "source/**.cpp",
 })
 
 includedirs({
-	"include",
+    "include",
 })
 
 libdirs({})
