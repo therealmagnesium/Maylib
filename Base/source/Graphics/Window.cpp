@@ -1,4 +1,5 @@
 #include "Graphics/Window.h"
+#include "Core/Application.h"
 #include "Core/Base.h"
 #include "Core/Input.h"
 #include "Core/Log.h"
@@ -75,7 +76,7 @@ namespace Maylib
             SetTheme();
 
             ImGui_ImplSDL2_InitForOpenGL(m_handle, glContext);
-            ImGui_ImplOpenGL3_Init("#version 460");
+            ImGui_ImplOpenGL3_Init("#version 330");
         }
 
         void Window::HandleEvents()
@@ -154,6 +155,10 @@ namespace Maylib
                 {
                     s32 newWidth = event.window.data1;
                     s32 newHeight = event.window.data2;
+
+                    AppInfo& appInfo = Application::Get()->GetInfo();
+                    appInfo.screenWidth = newWidth;
+                    appInfo.screenHeight = newHeight;
 
                     LOG_INFO("Window resized to %dx%d", newWidth, newHeight);
                     glViewport(0, 0, newWidth, newHeight);

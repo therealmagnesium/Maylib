@@ -18,7 +18,7 @@ includedirs({
 	"../vendor/glad/include",
 	"../vendor/stb_image/source",
 	"../vendor/ImGui/include",
-	"/ucrt64/include",
+	"/mingw64/include",
 })
 
 libdirs({
@@ -31,6 +31,7 @@ links({
 	"Maylib-Base",
 	"glad",
 	"stb_image",
+	"assimp",
 	"ImGui",
 	"ImGui_SDL2_GL3",
 	"SDL2",

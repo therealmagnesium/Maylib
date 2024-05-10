@@ -2,7 +2,9 @@
 
 #include <Core/Application.h>
 
+#include <Graphics/Camera.h>
 #include <Graphics/Mesh.h>
+#include <Graphics/Model.h>
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
 
@@ -20,6 +22,9 @@ public:
 
 private:
     Mesh m_mesh;
+    Model m_model;
     Shader m_shader;
     Texture m_texture;
+
+    Camera m_camera;
 };

@@ -15,6 +15,8 @@ namespace Maylib
         Application::Application(const AppInfo& info)
         {
             s_instance = this;
+            m_info = info;
+
             m_window.Create(info.screenWidth, info.screenHeight, info.name);
         }
 

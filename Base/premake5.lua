@@ -18,7 +18,7 @@ includedirs({
 	"../vendor/glad/include",
 	"../vendor/stb_image/source",
 	"../vendor/ImGui/include",
-	"/ucrt64/include",
+	"/mingw64/include",
 })
 
 libdirs({
@@ -30,6 +30,7 @@ libdirs({
 links({
 	"glad",
 	"stb_image",
+	"assimp",
 	"SDL2",
 	"ImGui",
 	"ImGui_SDL2_GL3",

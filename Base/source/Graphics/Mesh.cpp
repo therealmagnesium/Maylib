@@ -18,6 +18,7 @@ namespace Maylib
     namespace Graphics
     {
         Mesh::Mesh() {}
+        Mesh::Mesh(const MeshData& data) { this->Create(data); }
 
         void Mesh::Create(const MeshData& data)
         {
@@ -47,12 +48,6 @@ namespace Maylib
             u32 numDiffuse = 1;
             u32 numSpecular = 1;
 
-            if (m_data.textures.size() == 0)
-            {
-                LOG_WARN("Can't draw mesh because no textures set in MeshData");
-                return;
-            }
-
             for (u32 i = 0; i < m_data.textures.size(); i++)
             {
                 std::string number;
@@ -65,8 +60,8 @@ namespace Maylib
                 else
                     LOG_WARN("Mesh::Draw(Shader&) - Unknown texture type %s", name.c_str());
 
-                m_data.textures[i].Bind(i);
                 shader.SetInt(name + number, i);
+                m_data.textures[i].Bind(i);
             }
 
             m_vertexArray.Bind();

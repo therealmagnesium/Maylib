@@ -25,6 +25,9 @@ namespace Maylib
             ~Application();
 
             static inline Application* Get() { return s_instance; }
+            inline AppInfo& GetInfo() { return m_info; }
+            inline Window* GetWindow() { return &m_window; }
+
             inline void ToggleDebug() { m_debugMode = !m_debugMode; }
 
             void Run();
@@ -41,6 +44,7 @@ namespace Maylib
             bool m_running = true;
             bool m_debugMode = false;
             Window m_window;
+            AppInfo m_info;
 
         private:
             static Application* s_instance;

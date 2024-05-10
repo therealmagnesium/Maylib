@@ -3,6 +3,7 @@
 #include "Core/Log.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Maylib
 {
@@ -21,10 +22,10 @@ namespace Maylib
             this->CreateProgram(vertexShader, fragmentShader);
         }
 
-        void Shader::SetInt(const std::string& name, s32 value)
+        void Shader::SetInt(const std::string& name, s32 value, bool debug)
         {
             s32 location = glGetUniformLocation(m_id, name.c_str());
-            if (location == -1)
+            if (location == -1 && debug)
             {
                 LOG_WARN("int '%s' was not found in shader, or it is not in use", name.c_str());
                 return;
@@ -33,16 +34,29 @@ namespace Maylib
             glUniform1i(location, value);
         }
 
-        void Shader::SetFloat(const std::string& name, float value)
+        void Shader::SetFloat(const std::string& name, float value, bool debug)
         {
             s32 location = glGetUniformLocation(m_id, name.c_str());
-            if (location == -1)
+            if (location == -1 && debug)
             {
                 LOG_WARN("float '%s' was not found in shader, or it is not in use", name.c_str());
                 return;
             }
 
             glUniform1f(location, value);
+        }
+
+        void Shader::SetMat4(const std::string& name, glm::mat4 value, bool debug)
+        {
+            s32 location = glGetUniformLocation(m_id, name.c_str());
+
+            if (location == -1 && debug)
+            {
+                LOG_WARN("float '%s' was not found in shader, or it is not in use", name.c_str());
+                return;
+            }
+
+            glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
         }
 
         u32 Shader::CompileShader(u32 type, const std::string& source)

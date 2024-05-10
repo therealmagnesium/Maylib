@@ -52,7 +52,7 @@ MaylibApp::MaylibApp(const AppInfo& info) : Application(info)
     for (u32 i : indices)
         data.indices.push_back(i);
 
-    // data.textures.push_back(m_texture);
+    data.textures.push_back(m_texture);
 
     m_mesh.Create(data);
 }
@@ -64,11 +64,13 @@ void MaylibApp::OnUpdate()
 
     if (Input::IsKeyTyped(SDL_SCANCODE_D))
         this->ToggleDebug();
+
+    m_camera.Update();
 }
 
 void MaylibApp::OnRender()
 {
-    // draw stuff
+    m_camera.CalculateMatrix(m_shader);
     m_mesh.Draw(m_shader);
 }
 
@@ -79,4 +81,6 @@ void MaylibApp::OnUIRender()
         ImGui::Button("Hello");
     }
     ImGui::End();
+
+    ImGui::ShowDemoWindow();
 }

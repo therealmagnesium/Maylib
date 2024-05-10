@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Base.h"
+#include <glm/ext/matrix_float4x4.hpp>
 #include <string>
 
 namespace Maylib
@@ -22,8 +23,9 @@ namespace Maylib
             void Unbind();
             void Load(const ShaderSource& source);
 
-            void SetInt(const std::string& name, s32 value);
-            void SetFloat(const std::string& name, float value);
+            void SetInt(const std::string& name, s32 value, bool debug = false);
+            void SetFloat(const std::string& name, float value, bool debug = false);
+            void SetMat4(const std::string& name, glm::mat4 value, bool debug = false);
 
         private:
             u32 CompileShader(u32 type, const std::string& source);

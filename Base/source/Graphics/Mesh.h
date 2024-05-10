@@ -25,6 +25,7 @@ namespace Maylib
         {
         public:
             Mesh();
+            Mesh(const MeshData& data);
 
             void Create(const MeshData& data);
             void Draw(Shader& shader);
