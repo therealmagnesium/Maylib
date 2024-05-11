@@ -26,7 +26,7 @@ namespace Maylib
             AppInfo& appInfo = app->GetInfo();
             aspect = (float)appInfo.screenWidth / appInfo.screenHeight;
 
-            m_position = glm::vec3(0.f, 0.f, 2.f);
+            m_position = glm::vec3(0.f, 0.f, 5.f);
             m_up = glm::vec3(0.f, 1.f, 0.f);
             m_orientation = glm::vec3(0.f, 0.f, -1.f);
 

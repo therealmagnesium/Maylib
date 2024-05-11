@@ -18,7 +18,7 @@ namespace Maylib
         {
             std::vector<Vertex> vertices;
             std::vector<u32> indices;
-            std::vector<Texture> textures;
+            std::vector<Texture*> textures;
         };
 
         class Mesh

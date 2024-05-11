@@ -67,6 +67,8 @@ namespace Maylib
             LOG_INFO("GPU renderer: %s", glGetString(GL_RENDERER));
             LOG_INFO("GPU version: %s", glGetString(GL_VERSION));
 
+            glEnable(GL_DEPTH_TEST);
+
             ImGui::CreateContext();
 
             ImGuiIO& io = ImGui::GetIO();
@@ -100,7 +102,7 @@ namespace Maylib
             ImGui::Render();
 
             glClearColor(r, g, b, 1.f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
         void Window::Display()

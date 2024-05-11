@@ -21,10 +21,8 @@ public:
     void OnUIRender() override;
 
 private:
-    Mesh m_mesh;
     Model m_model;
     Shader m_shader;
-    Texture m_texture;
 
     Camera m_camera;
 };

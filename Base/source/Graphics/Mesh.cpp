@@ -51,7 +51,7 @@ namespace Maylib
             for (u32 i = 0; i < m_data.textures.size(); i++)
             {
                 std::string number;
-                std::string name = m_data.textures[i].GetType();
+                std::string name = m_data.textures[i]->GetType();
 
                 if (name == "diffuse")
                     number = std::to_string(numDiffuse++);
@@ -60,14 +60,13 @@ namespace Maylib
                 else
                     LOG_WARN("Mesh::Draw(Shader&) - Unknown texture type %s", name.c_str());
 
-                shader.SetInt(name + number, i);
-                m_data.textures[i].Bind(i);
+                shader.SetInt(name + number, i, false);
+                m_data.textures[i]->Bind(i);
             }
 
             m_vertexArray.Bind();
             glDrawElements(GL_TRIANGLES, m_data.indices.size(), GL_UNSIGNED_INT, 0);
             m_vertexArray.Unbind();
-
             shader.Unbind();
         }
     }

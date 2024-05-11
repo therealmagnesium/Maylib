@@ -1,9 +1,13 @@
 #include "Graphics/Model.h"
+#include "Core/AssetManager.h"
 #include "Core/Base.h"
 #include "Core/Log.h"
 #include "Core/Vertex.h"
 #include "Graphics/Mesh.h"
+#include "Graphics/Texture.h"
 
+#include <assimp/material.h>
+#include <cstring>
 #include <string>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -38,7 +42,19 @@ namespace Maylib
         void Model::Draw(Shader& shader)
         {
             for (u32 i = 0; i < m_meshes.size(); i++)
-                m_meshes[i].Draw(shader);
+                m_meshes[i]->Draw(shader);
+        }
+
+        void Model::SetTexture(TextureMapType type, Texture* texture)
+        {
+            if (!texture)
+            {
+                LOG_ERROR("Model::SetDiffuseTexture() - Cannot set diffuse texture because it's null");
+                return;
+            }
+
+            m_textureMaps[type] = texture;
+            m_loadedTextureMaps[type] = true;
         }
 
         void Model::ProcessNode(aiNode* node, const aiScene* scene)
@@ -53,7 +69,7 @@ namespace Maylib
                 this->ProcessNode(node->mChildren[i], scene);
         }
 
-        Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+        Mesh* Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         {
             MeshData meshData;
 
@@ -97,7 +113,14 @@ namespace Maylib
                     meshData.indices.push_back(face.mIndices[j]);
             }
 
-            return Mesh(meshData);
+            for (u32 i = 0; i < TEXTURE_MAP_COUNT; i++)
+            {
+                if (m_loadedTextureMaps[i])
+                    meshData.textures.push_back(m_textureMaps[i]);
+            }
+
+            return new Mesh(meshData);
         }
     }
+
 }
