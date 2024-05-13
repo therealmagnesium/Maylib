@@ -26,7 +26,7 @@ MaylibApp::MaylibApp(const AppInfo& info) : Application(info)
     shaderSource.fragment = ReadFile("assets/shaders/basic_fragment.glsl");
     m_shader.Load(shaderSource);
 
-    AssetManager::AddTexture("model_diffuse", "diffuse", "assets/models/diffuse.jpg");
+    AssetManager::AddTexture("model_diffuse", "diffuse", "assets/textures/backpack/diffuse.jpg");
     Texture* texture = AssetManager::GetTexture("model_diffuse");
 
     m_model.SetTexture(TEXTURE_MAP_DIFFUSE, texture);
@@ -38,7 +38,7 @@ void MaylibApp::OnUpdate()
     if (Input::IsKeyTyped(SDL_SCANCODE_ESCAPE))
         this->Quit();
 
-    if (Input::IsKeyTyped(SDL_SCANCODE_D))
+    if (Input::IsKeyTyped(SDL_SCANCODE_E))
         this->ToggleDebug();
 
     m_camera.Update();

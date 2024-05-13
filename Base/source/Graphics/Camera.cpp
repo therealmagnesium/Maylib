@@ -4,9 +4,13 @@
 #include "Core/Input.h"
 #include "Graphics/Shader.h"
 #include "glm/geometric.hpp"
-#include "glm/trigonometric.hpp"
+#include <SDL2/SDL_mouse.h>
+#include <cmath>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/ext/vector_float3.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -48,25 +52,81 @@ namespace Maylib
 
         void Camera::Update()
         {
+            if (!app->DebugEnabled())
+            {
+                this->HandleKeyInputs();
+                this->HandleMouseInputs();
+            }
+        }
+
+        void Camera::HandleKeyInputs()
+        {
             glm::vec3 right = glm::cross(m_orientation, m_up);
 
-            if (Input::IsKeyDown(SDL_SCANCODE_LEFT))
+            if (Input::IsKeyDown(SDL_SCANCODE_A))
                 m_position += m_moveSpeed * -right;
 
-            if (Input::IsKeyDown(SDL_SCANCODE_RIGHT))
+            if (Input::IsKeyDown(SDL_SCANCODE_D))
                 m_position += m_moveSpeed * right;
 
-            if (Input::IsKeyDown(SDL_SCANCODE_UP) && !Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
+            if (Input::IsKeyDown(SDL_SCANCODE_W) && !Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
                 m_position += m_moveSpeed * m_up;
 
-            if (Input::IsKeyDown(SDL_SCANCODE_DOWN) && !Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
+            if (Input::IsKeyDown(SDL_SCANCODE_S) && !Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
                 m_position += m_moveSpeed * -m_up;
 
-            if (Input::IsKeyDown(SDL_SCANCODE_UP) && Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
+            if (Input::IsKeyDown(SDL_SCANCODE_W) && Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
                 m_position += m_moveSpeed * m_orientation;
 
-            if (Input::IsKeyDown(SDL_SCANCODE_DOWN) && Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
+            if (Input::IsKeyDown(SDL_SCANCODE_S) && Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
                 m_position += m_moveSpeed * -m_orientation;
+        }
+
+        void Camera::HandleMouseInputs()
+        {
+            static s32 lastX = 0;
+            static s32 lastY = 0;
+            static bool firstClick = true;
+
+            if (Input::IsMouseButtonDown(MOUSE_LEFT))
+            {
+                SDL_ShowCursor(false);
+
+                if (firstClick)
+                {
+                    lastX = Input::GetMouseX();
+                    lastY = Input::GetMouseY();
+                    firstClick = false;
+                }
+
+                float xOffset = Input::GetMouseX() - lastX;
+                float yOffset = Input::GetMouseY() - lastY;
+
+                lastX = Input::GetMouseX();
+                lastY = Input::GetMouseY();
+
+                xOffset *= m_sensitivity;
+                yOffset *= m_sensitivity;
+
+                m_yaw += xOffset;
+                m_pitch += yOffset;
+
+                if (m_pitch > 80.f)
+                    m_pitch = 80.f;
+                if (m_pitch < -80.f)
+                    m_pitch = -80.f;
+
+                m_orientation.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+                m_orientation.y = sin(glm::radians(-m_pitch));
+                m_orientation.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+
+                m_orientation = glm::normalize(m_orientation);
+            }
+            else
+            {
+                SDL_ShowCursor(true);
+                firstClick = true;
+            }
         }
     }
 }

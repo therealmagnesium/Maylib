@@ -17,6 +17,8 @@ namespace Maylib
             ~Window();
 
             inline bool ShouldClose() { return m_closed; }
+            inline SDL_Window* GetHandle() { return m_handle; }
+
             inline void Close() { m_closed = true; }
 
             void Create(u32 width, u32 height, const std::string& title);

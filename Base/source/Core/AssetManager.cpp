@@ -1,17 +1,18 @@
 #include "Core/AssetManager.h"
 #include "Core/Log.h"
 #include "Graphics/Texture.h"
+#include <memory>
 #include <unordered_map>
 
 namespace Maylib
 {
     namespace Core
     {
-        std::unordered_map<std::string, Texture*> AssetManager::s_textures{};
+        std::unordered_map<std::string, std::shared_ptr<Texture>> AssetManager::s_textures{};
 
-        Texture* AssetManager::GetTexture(const char* name) { return s_textures.at(name); }
+        Texture* AssetManager::GetTexture(const char* name) { return s_textures.at(name).get(); }
 
-        void AssetManager::AddTexture(const char* name, const char* type, const char* path)
+        void AssetManager::AddTexture(const char* name, const char* type, const char* path, bool alpha)
         {
             if (s_textures.find(name) != s_textures.end())
             {
@@ -19,9 +20,9 @@ namespace Maylib
                 return;
             }
 
-            Texture* texture = new Texture();
+            std::shared_ptr<Texture> texture = std::make_shared<Texture>();
             texture->SetType(type);
-            texture->Load(path);
+            texture->Load(path, alpha);
 
             if (!texture)
             {
@@ -31,5 +32,7 @@ namespace Maylib
 
             s_textures[name] = texture;
         }
+
+        void AssetManager::Clean() { s_textures.clear(); }
     }
 }

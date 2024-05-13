@@ -1,4 +1,5 @@
 #include "Core/Application.h"
+#include "Core/AssetManager.h"
 #include "Core/Log.h"
 #include <glad/glad.h>
 
@@ -20,7 +21,7 @@ namespace Maylib
             m_window.Create(info.screenWidth, info.screenHeight, info.name);
         }
 
-        Application::~Application() { this->Quit(); }
+        Application::~Application() {}
 
         void Application::Run()
         {

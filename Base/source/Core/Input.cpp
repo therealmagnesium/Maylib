@@ -7,11 +7,19 @@ namespace Maylib
 {
     namespace Core
     {
-        bool Input::keyTyped = false;
-        bool Input::keysDown[300]{0};
+        bool Input::s_keyTyped = false;
+        bool Input::s_keysDown[TOTAL_KEYBOARD_KEYS]{};
 
-        bool Input::IsKeyDown(SDL_Scancode key) { return keysDown[key]; }
-        bool Input::IsKeyTyped(SDL_Scancode key) { return keysDown[key] && keyTyped; }
+        s32 Input::s_mouseX = 0;
+        s32 Input::s_mouseY = 0;
+        bool Input::s_mouseClicked = false;
+        bool Input::s_mouseButtonsDown[MOUSE_BUTTON_COUNT]{};
+
+        bool Input::IsKeyDown(SDL_Scancode key) { return s_keysDown[key]; }
+        bool Input::IsKeyTyped(SDL_Scancode key) { return s_keysDown[key] && s_keyTyped; }
+
+        bool Input::IsMouseButtonDown(MouseButton button) { return s_mouseButtonsDown[button]; }
+        bool Input::IsMouseClicked(MouseButton button) { return s_mouseButtonsDown[button] && s_mouseClicked; }
 
         s8 Input::GetAxis(const std::string& axis, bool alt)
         {

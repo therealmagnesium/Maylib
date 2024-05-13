@@ -5,6 +5,7 @@
 #include "Core/Log.h"
 #include "UI/Theme.h"
 
+#include <SDL2/SDL_mouse.h>
 #include <glad/glad.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -83,7 +84,8 @@ namespace Maylib
 
         void Window::HandleEvents()
         {
-            Input::keyTyped = false;
+            Input::s_keyTyped = false;
+            Input::s_mouseClicked = false;
 
             SDL_Event event;
             while (SDL_PollEvent(&event))
@@ -123,18 +125,39 @@ namespace Maylib
 
                 case SDL_KEYDOWN:
                 {
-                    bool keyCheck = Input::keysDown[event.key.keysym.scancode];
-                    Input::keyTyped = (keyCheck) ? false : true;
-                    Input::keysDown[event.key.keysym.scancode] = true;
+                    bool keyCheck = Input::s_keysDown[event.key.keysym.scancode];
+                    Input::s_keyTyped = (keyCheck) ? false : true;
+                    Input::s_keysDown[event.key.keysym.scancode] = true;
 
                     break;
                 }
 
                 case SDL_KEYUP:
                 {
-                    Input::keyTyped = false;
-                    Input::keysDown[event.key.keysym.scancode] = false;
+                    Input::s_keyTyped = false;
+                    Input::s_keysDown[event.key.keysym.scancode] = false;
 
+                    break;
+                }
+
+                case SDL_MOUSEMOTION:
+                {
+                    SDL_GetMouseState(&Input::s_mouseX, &Input::s_mouseY);
+                    break;
+                }
+
+                case SDL_MOUSEBUTTONDOWN:
+                {
+                    bool buttonCheck = Input::s_mouseButtonsDown[event.button.button - 1];
+                    Input::s_mouseClicked = (buttonCheck) ? false : true;
+                    Input::s_mouseButtonsDown[event.button.button - 1] = true;
+                    break;
+                }
+
+                case SDL_MOUSEBUTTONUP:
+                {
+                    Input::s_mouseClicked = false;
+                    Input::s_mouseButtonsDown[event.button.button - 1] = false;
                     break;
                 }
 

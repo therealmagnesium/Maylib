@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Base.h"
 #include "Graphics/Window.h"
+#include <SDL2/SDL_mouse.h>
 #include <string>
 
 using namespace Maylib::Graphics;
@@ -25,9 +26,11 @@ namespace Maylib
             ~Application();
 
             static inline Application* Get() { return s_instance; }
+            inline bool DebugEnabled() { return m_debugMode; }
             inline AppInfo& GetInfo() { return m_info; }
             inline Window* GetWindow() { return &m_window; }
 
+            inline void ShowCursor(bool toggle) { SDL_ShowCursor(toggle); }
             inline void ToggleDebug() { m_debugMode = !m_debugMode; }
 
             void Run();
