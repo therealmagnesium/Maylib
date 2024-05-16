@@ -5,6 +5,7 @@
 #include <Core/Base.h>
 #include <Core/Input.h>
 #include <Core/Log.h>
+#include <Core/Time.h>
 #include <Core/Vertex.h>
 #include <Core/VertexArray.h>
 
@@ -55,8 +56,8 @@ void MaylibApp::OnUIRender()
     ImGui::Begin("Debug Menu");
     {
         ImGui::Button("Hello");
+        ImGui::Text("FPS: %.3f", 1.f / Time::GetElapsed());
+        ImGui::Text("Delta time: %f", Time::GetElapsed());
     }
     ImGui::End();
-
-    ImGui::ShowDemoWindow();
 }

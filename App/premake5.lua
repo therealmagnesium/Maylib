@@ -39,6 +39,7 @@ links({
 
 postbuildcommands({
 	"cp -r assets/ %{cfg.buildtarget.directory}",
+	"cp ../vendor/dlls/*.dll %{cfg.buildtarget.directory}",
 })
 
 filter("system:Unix")
@@ -55,9 +56,6 @@ cppdialect("C++17")
 systemversion("latest")
 defines({
 	"PLATFORM_WINDOWs",
-})
-postbuildcommands({
-	"cp ../vendor/SDL2/windows/SDL2.dll " .. "%{cfg.buildtarget.directory}",
 })
 
 filter("configurations:Debug")

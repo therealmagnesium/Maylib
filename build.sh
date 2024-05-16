@@ -35,7 +35,11 @@ then
     then
         cp -r "App/assets/" "bin/Dist-$system/Application/"
     fi
-
+elif [[ $config = "ecc" ]] 
+then	
+    system="$2"
+    "./vendor/premake/$system/premake5" export-compile-commands
+    cp "compile_commands/debug.json" "compile_commands.json"
 elif [[ $config = "clean" ]]
 then
     rm -rf bin build
@@ -46,8 +50,6 @@ then
 	rm vendor/stb_image/Makefile
 else
     system="$2"
-    "./vendor/premake/$system/premake5" export-compile-commands
     "./vendor/premake/$system/premake5" gmake
     make all config=$config -j7
-    cp "compile_commands/$config.json" "compile_commands.json"
 fi

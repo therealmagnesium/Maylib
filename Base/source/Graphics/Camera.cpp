@@ -2,12 +2,14 @@
 #include "Core/Application.h"
 #include "Core/Base.h"
 #include "Core/Input.h"
+#include "Core/Log.h"
 #include "Graphics/Shader.h"
-#include "glm/geometric.hpp"
+
 #include <SDL2/SDL_mouse.h>
 #include <cmath>
 
 #define GLM_ENABLE_EXPERIMENTAL
+#include <glm/geometric.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
