@@ -4,6 +4,7 @@
 #include "Core/Time.h"
 #include <SDL2/SDL_timer.h>
 #include <glad/glad.h>
+#include <imgui.h>
 
 namespace Maylib
 {
@@ -29,7 +30,10 @@ namespace Maylib
         {
             while (m_running)
             {
-                u64 start = SDL_GetPerformanceCounter();
+                float time = ImGui::GetTime();
+                Time::s_deltaTime = (time - Time::s_lastFrameTime);
+                Time::s_lastFrameTime = time;
+
                 m_running = !m_window.ShouldClose();
 
                 m_window.HandleEvents();
@@ -41,14 +45,6 @@ namespace Maylib
                 m_window.Clear(clearRedChannel, clearGreenChannel, clearBlueChannel);
                 this->OnRender();
                 m_window.Display();
-
-                u64 end = SDL_GetPerformanceCounter();
-
-                float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
-                Time::s_deltaTime = elapsed;
-                /*
-                                if (1000.f / Time::s_targetFPS > end - start)
-                                    SDL_Delay(floor((1000.f / Time::s_targetFPS) - (Time::s_deltaTime * 1000.f)));*/
             }
         }
 

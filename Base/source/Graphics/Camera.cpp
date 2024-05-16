@@ -4,6 +4,7 @@
 #include "Core/Input.h"
 #include "Core/Log.h"
 #include "Graphics/Shader.h"
+#include "Core/Time.h"
 
 #include <SDL2/SDL_mouse.h>
 #include <cmath>
@@ -66,22 +67,22 @@ namespace Maylib
             glm::vec3 right = glm::cross(m_orientation, m_up);
 
             if (Input::IsKeyDown(SDL_SCANCODE_A))
-                m_position += m_moveSpeed * -right;
+                m_position += m_moveSpeed * -right * Time::GetElapsed();
 
             if (Input::IsKeyDown(SDL_SCANCODE_D))
-                m_position += m_moveSpeed * right;
+                m_position += m_moveSpeed * right * Time::GetElapsed();
 
             if (Input::IsKeyDown(SDL_SCANCODE_W) && !Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
-                m_position += m_moveSpeed * m_up;
+                m_position += m_moveSpeed * m_up * Time::GetElapsed();
 
             if (Input::IsKeyDown(SDL_SCANCODE_S) && !Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
-                m_position += m_moveSpeed * -m_up;
+                m_position += m_moveSpeed * -m_up * Time::GetElapsed();
 
             if (Input::IsKeyDown(SDL_SCANCODE_W) && Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
-                m_position += m_moveSpeed * m_orientation;
+                m_position += m_moveSpeed * m_orientation * Time::GetElapsed();
 
             if (Input::IsKeyDown(SDL_SCANCODE_S) && Input::IsKeyDown(SDL_SCANCODE_LSHIFT))
-                m_position += m_moveSpeed * -m_orientation;
+                m_position += m_moveSpeed * -m_orientation * Time::GetElapsed();
         }
 
         void Camera::HandleMouseInputs()
@@ -107,8 +108,8 @@ namespace Maylib
                 lastX = Input::GetMouseX();
                 lastY = Input::GetMouseY();
 
-                xOffset *= m_sensitivity;
-                yOffset *= m_sensitivity;
+                xOffset *= m_sensitivity * Time::GetElapsed();
+                yOffset *= m_sensitivity * Time::GetElapsed();
 
                 m_yaw += xOffset;
                 m_pitch += yOffset;

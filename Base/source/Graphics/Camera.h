@@ -21,8 +21,8 @@ namespace Maylib
             void HandleMouseInputs();
 
         private:
-            float m_moveSpeed = 0.08f;
-            float m_sensitivity = 0.1f;
+            float m_moveSpeed = 5.f;
+            float m_sensitivity = 4.f;
 
             float m_pitch = 0.f;
             float m_yaw = -90.f;

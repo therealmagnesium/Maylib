@@ -14,7 +14,7 @@ namespace Maylib
 
         private:
             static float s_deltaTime;
-            static float s_prevTime;
+            static float s_lastFrameTime;
             static u16 s_targetFPS;
 
         private:
