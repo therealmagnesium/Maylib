@@ -3,6 +3,7 @@
 #include <Core/Application.h>
 
 #include <Graphics/Camera.h>
+#include <Graphics/Cubemap.h>
 #include <Graphics/Mesh.h>
 #include <Graphics/Model.h>
 #include <Graphics/Shader.h>
@@ -22,6 +23,8 @@ public:
 
 private:
     Model m_model;
+    Cubemap m_skybox;
+    Shader m_skyboxShader;
     Shader m_shader;
 
     Camera m_camera;

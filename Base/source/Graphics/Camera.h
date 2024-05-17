@@ -14,7 +14,7 @@ namespace Maylib
             Camera();
 
             void Update();
-            void CalculateMatrix(Shader& shader);
+            void CalculateMatrix(Shader& shader, bool convertView = false);
 
         private:
             void HandleKeyInputs();
@@ -22,7 +22,7 @@ namespace Maylib
 
         private:
             float m_moveSpeed = 5.f;
-            float m_sensitivity = 4.f;
+            float m_sensitivity = 5.f;
 
             float m_pitch = 0.f;
             float m_yaw = -90.f;

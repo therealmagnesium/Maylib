@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Math.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"
@@ -26,18 +27,24 @@ namespace Maylib
         public:
             Model();
 
+            void SetPosition(float x, float y, float z);
+            void SetRotation(float x, float y, float z);
+            void SetScale(float x, float y, float z);
+
             void Load(const char* path);
             void Draw(Shader& shader);
             void SetTexture(TextureMapType type, Texture* texture);
 
         private:
+            void SetupMatrix();
             void ProcessNode(aiNode* node, const aiScene* scene);
             Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
         private:
-            std::string m_directory;
-            std::vector<Mesh*> m_meshes;
+            Transform m_transform;
+            glm::mat4 m_modelMatrix;
 
+            std::vector<Mesh*> m_meshes;
             Texture* m_textureMaps[TEXTURE_MAP_COUNT]{};
             bool m_loadedTextureMaps[TEXTURE_MAP_COUNT]{};
         };

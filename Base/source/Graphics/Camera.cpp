@@ -41,11 +41,15 @@ namespace Maylib
             m_projection = glm::mat4(1.f);
         }
 
-        void Camera::CalculateMatrix(Shader& shader)
+        void Camera::CalculateMatrix(Shader& shader, bool convertView)
         {
             shader.Bind();
 
-            m_view = glm::lookAt(m_position, m_position + m_orientation, m_up);
+            if (convertView)
+                m_view = glm::mat4(glm::mat3(glm::lookAt(m_position, m_position + m_orientation, m_up)));
+            else
+                m_view = glm::lookAt(m_position, m_position + m_orientation, m_up);
+
             m_projection = glm::perspective(glm::radians(45.f), aspect, 0.1f, 1000.f);
 
             shader.SetMat4("camMatrix", m_projection * m_view, true);
