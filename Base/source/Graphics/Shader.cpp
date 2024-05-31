@@ -46,6 +46,30 @@ namespace Maylib
             glUniform1f(location, value);
         }
 
+        void Shader::SetVec3(const std::string& name, glm::vec3 value, bool debug)
+        {
+            s32 location = glGetUniformLocation(m_id, name.c_str());
+            if (location == -1 && debug)
+            {
+                LOG_WARN("float '%s' was not found in shader, or it is not in use", name.c_str());
+                return;
+            }
+
+            glUniform3fv(location, 1, glm::value_ptr(value));
+        }
+
+        void Shader::SetVec4(const std::string& name, glm::vec4 value, bool debug)
+        {
+            s32 location = glGetUniformLocation(m_id, name.c_str());
+            if (location == -1 && debug)
+            {
+                LOG_WARN("float '%s' was not found in shader, or it is not in use", name.c_str());
+                return;
+            }
+
+            glUniform4fv(location, 1, glm::value_ptr(value));
+        }
+
         void Shader::SetMat4(const std::string& name, glm::mat4 value, bool debug)
         {
             s32 location = glGetUniformLocation(m_id, name.c_str());

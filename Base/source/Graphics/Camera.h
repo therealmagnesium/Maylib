@@ -13,8 +13,14 @@ namespace Maylib
         public:
             Camera();
 
+            inline float GetYaw() { return m_yaw; }
+            inline float GetPitch() { return m_pitch; }
+            inline float GetRoll() { return m_roll; }
+            inline glm::vec3& GetPosition() { return m_position; }
+            inline glm::vec3& GetRotation() { return m_rotation; }
+
             void Update();
-            void CalculateMatrix(Shader& shader, bool convertView = false);
+            void CalculateMatrix(Shader* shader, bool convertView = false);
 
         private:
             void HandleKeyInputs();
@@ -24,11 +30,12 @@ namespace Maylib
             float m_moveSpeed = 5.f;
             float m_sensitivity = 5.f;
 
-            float m_pitch = 0.f;
             float m_yaw = -90.f;
+            float m_pitch = 0.f;
             float m_roll = 0.f;
 
             glm::vec3 m_position;
+            glm::vec3 m_rotation;
             glm::vec3 m_up;
             glm::vec3 m_orientation;
 

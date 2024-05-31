@@ -1,4 +1,5 @@
 #include "Graphics/Model.h"
+#include "Core/Application.h"
 #include "Core/AssetManager.h"
 #include "Core/Base.h"
 #include "Core/Log.h"
@@ -34,7 +35,7 @@ namespace Maylib
         void Model::Load(const char* path)
         {
             Assimp::Importer importer;
-            u32 flags = aiProcess_Triangulate | aiProcess_FlipUVs;
+            u32 flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices;
             const aiScene* scene = importer.ReadFile(path, flags);
 
             if (!scene || !scene->mRootNode)
@@ -47,11 +48,20 @@ namespace Maylib
             this->SetupMatrix();
         }
 
-        void Model::Draw(Shader& shader)
+        void Model::Draw(Shader* shader, bool skybox)
         {
-            shader.Bind();
-            shader.SetMat4("modelMatrix", m_modelMatrix);
-            shader.Unbind();
+            this->SetupMatrix();
+
+            if (!skybox)
+            {
+                Camera* camera = Application::Get()->GetPrimaryCamera();
+                assert(camera);
+                camera->CalculateMatrix(shader);
+            }
+
+            shader->Bind();
+            shader->SetMat4("modelMatrix", m_modelMatrix);
+            shader->Unbind();
 
             for (u32 i = 0; i < m_meshes.size(); i++)
                 m_meshes[i]->Draw(shader);
@@ -136,6 +146,7 @@ namespace Maylib
 
         void Model::SetupMatrix()
         {
+            m_modelMatrix = glm::mat4(1.f);
             m_modelMatrix = glm::translate(m_modelMatrix, m_transform.position);
             m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_transform.rotation.x), glm::vec3(1.f, 0.f, 0.f));
             m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_transform.rotation.y), glm::vec3(0.f, 1.f, 0.f));

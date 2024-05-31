@@ -15,24 +15,21 @@ namespace Maylib
 {
     namespace Graphics
     {
-        enum TextureMapType
-        {
-            TEXTURE_MAP_DIFFUSE = 0,
-            TEXTURE_MAP_SPECULAR,
-            TEXTURE_MAP_COUNT,
-        };
-
         class Model
         {
         public:
             Model();
+
+            inline glm::vec3& GetPosition() { return m_transform.position; }
+            inline glm::vec3& GetRotation() { return m_transform.rotation; }
+            inline glm::vec3& GetScale() { return m_transform.scale; }
 
             void SetPosition(float x, float y, float z);
             void SetRotation(float x, float y, float z);
             void SetScale(float x, float y, float z);
 
             void Load(const char* path);
-            void Draw(Shader& shader);
+            void Draw(Shader* shader, bool skybox = false);
             void SetTexture(TextureMapType type, Texture* texture);
 
         private:

@@ -23,9 +23,13 @@ public:
 
 private:
     Model m_model;
+    Model m_lightCube;
+
     Cubemap m_skybox;
-    Shader m_skyboxShader;
-    Shader m_shader;
+
+    Shader* m_skyboxShader;
+    Shader* m_basicShader;
+    Shader* m_lightingShader;
 
     Camera m_camera;
 };

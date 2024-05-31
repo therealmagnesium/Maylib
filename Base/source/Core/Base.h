@@ -1,5 +1,7 @@
 #pragma once
+#include <memory>
 #include <stdint.h>
+#include <utility>
 
 typedef int8_t s8;
 typedef int16_t s16;
@@ -18,3 +20,22 @@ typedef uint64_t u64;
 #define V3_OPEN(v) v.x, v.y, v.z
 
 #define LEN(array) sizeof(array) / sizeof(array[0])
+
+namespace Maylib
+{
+    namespace Core
+    {
+        template <typename T> using Scope = std::unique_ptr<T>;
+        template <typename T> using Ref = std::shared_ptr<T>;
+
+        template <typename T, typename... Args> Scope<T> CreateScope(Args&&... args)
+        {
+            return std::make_unique<T>(std::forward<Args>(args)...);
+        }
+
+        template <typename T, typename... Args> Ref<T> CreateRef(Args&&... args)
+        {
+            return std::make_shared<T>(std::forward<Args>(args)...);
+        }
+    }
+}

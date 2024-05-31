@@ -6,6 +6,13 @@ namespace Maylib
 {
     namespace Graphics
     {
+        enum TextureMapType
+        {
+            TEXTURE_MAP_DIFFUSE = 0,
+            TEXTURE_MAP_SPECULAR,
+            TEXTURE_MAP_COUNT,
+        };
+
         struct TextureSpecification
         {
             s32 width;
@@ -19,16 +26,16 @@ namespace Maylib
             Texture();
             ~Texture();
 
-            inline std::string& GetType() { return m_type; }
-            inline void SetType(const char* type) { m_type = type; }
+            inline TextureMapType GetType() { return m_type; }
+            inline void SetType(TextureMapType type) { m_type = type; }
 
             void Bind(u8 slot = 0);
             void Unbind();
-            void Load(const char* path, bool alpha = false);
+            void Load(const char* path, bool flip = false, bool alpha = false);
 
         private:
             u32 m_id;
-            std::string m_type;
+            TextureMapType m_type;
             TextureSpecification m_spec;
         };
     }

@@ -20,7 +20,7 @@ namespace Maylib
 
         void Texture::Unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
 
-        void Texture::Load(const char* path, bool alpha)
+        void Texture::Load(const char* path, bool flip, bool alpha)
         {
             this->Bind();
 
@@ -29,7 +29,7 @@ namespace Maylib
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            stbi_set_flip_vertically_on_load(true);
+            stbi_set_flip_vertically_on_load(flip);
             u8* data = stbi_load(path, &m_spec.width, &m_spec.height, &m_spec.channelCount, 0);
             if (!data)
                 LOG_WARN("Failed to load texture %s!", path);

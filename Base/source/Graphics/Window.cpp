@@ -6,6 +6,7 @@
 #include "UI/Theme.h"
 
 #include <SDL2/SDL_mouse.h>
+#include <cassert>
 #include <glad/glad.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -24,7 +25,15 @@ namespace Maylib
 {
     namespace Graphics
     {
-        Window::Window(u32 width, u32 height, const std::string& title) { this->Create(width, height, title); }
+        static Application* app;
+
+        Window::Window(u32 width, u32 height, const std::string& title)
+        {
+            app = Application::Get();
+            assert(app);
+
+            this->Create(width, height, title);
+        }
 
         Window::~Window()
         {
@@ -34,6 +43,9 @@ namespace Maylib
 
         void Window::Create(u32 width, u32 height, const std::string& title)
         {
+            app = Application::Get();
+            assert(app);
+
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -94,6 +106,11 @@ namespace Maylib
                 ImGui_ImplSDL2_ProcessEvent(&event);
                 this->HandleEventTypes(event);
             }
+
+            if (app->FullscreenEnabled())
+                SDL_SetWindowFullscreen(m_handle, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            else
+                SDL_SetWindowFullscreen(m_handle, 0);
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplSDL2_NewFrame();

@@ -28,7 +28,7 @@ namespace Maylib
             Mesh(const MeshData& data);
 
             void Create(const MeshData& data);
-            void Draw(Shader& shader);
+            void Draw(Shader* shader);
 
         private:
             MeshData m_data;

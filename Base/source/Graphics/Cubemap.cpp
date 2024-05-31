@@ -1,6 +1,8 @@
 #include "Graphics/Cubemap.h"
+#include "Core/Application.h"
 #include "Core/Base.h"
 #include "Core/Log.h"
+#include "Graphics/Camera.h"
 
 #include <glad/glad.h>
 #include <stb_image.h>
@@ -50,15 +52,19 @@ namespace Maylib
             this->Unbind();
         }
 
-        void Cubemap::Draw(Shader& shader)
+        void Cubemap::Draw(Shader* shader)
         {
-            glDepthMask(false);
-            shader.Bind();
-            shader.SetInt("skybox", 0, false);
-            this->Bind();
-            shader.Unbind();
+            Camera* camera = Application::Get()->GetPrimaryCamera();
+            assert(camera);
+            camera->CalculateMatrix(shader, true);
 
-            m_cube.Draw(shader);
+            glDepthMask(false);
+            shader->Bind();
+            shader->SetInt("skybox", 0, false);
+            this->Bind();
+            shader->Unbind();
+
+            m_cube.Draw(shader, true);
             glDepthMask(true);
         }
     }

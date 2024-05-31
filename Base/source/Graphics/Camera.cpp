@@ -41,9 +41,9 @@ namespace Maylib
             m_projection = glm::mat4(1.f);
         }
 
-        void Camera::CalculateMatrix(Shader& shader, bool convertView)
+        void Camera::CalculateMatrix(Shader* shader, bool convertView)
         {
-            shader.Bind();
+            shader->Bind();
 
             if (convertView)
                 m_view = glm::mat4(glm::mat3(glm::lookAt(m_position, m_position + m_orientation, m_up)));
@@ -52,13 +52,15 @@ namespace Maylib
 
             m_projection = glm::perspective(glm::radians(45.f), aspect, 0.1f, 1000.f);
 
-            shader.SetMat4("camMatrix", m_projection * m_view, true);
+            shader->SetMat4("camMatrix", m_projection * m_view, true);
 
-            shader.Unbind();
+            shader->Unbind();
         }
 
         void Camera::Update()
         {
+            m_rotation = glm::vec3(m_yaw, m_pitch, m_roll);
+
             if (!app->DebugEnabled())
             {
                 this->HandleKeyInputs();
@@ -112,11 +114,11 @@ namespace Maylib
                 lastX = Input::GetMouseX();
                 lastY = Input::GetMouseY();
 
-                xOffset *= m_sensitivity * Time::GetElapsed();
-                yOffset *= m_sensitivity * Time::GetElapsed();
+                xOffset *= m_sensitivity;
+                yOffset *= m_sensitivity;
 
-                m_yaw += xOffset;
-                m_pitch += yOffset;
+                m_yaw += xOffset * Time::GetElapsed();
+                m_pitch += yOffset * Time::GetElapsed();
 
                 if (m_pitch > 80.f)
                     m_pitch = 80.f;

@@ -28,6 +28,12 @@ namespace Maylib
 
         void Application::Run()
         {
+            if (!m_primaryCamera)
+            {
+                LOG_FATAL("No primary camera set!");
+                return;
+            }
+
             while (m_running)
             {
                 float time = ImGui::GetTime();

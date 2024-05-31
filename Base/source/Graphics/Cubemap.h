@@ -18,7 +18,7 @@ namespace Maylib
             void Bind();
             void Unbind();
             void Load(std::string* texturePaths);
-            void Draw(Shader& shader);
+            void Draw(Shader* shader);
 
         private:
             u32 m_id;

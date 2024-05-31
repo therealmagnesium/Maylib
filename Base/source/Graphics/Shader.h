@@ -25,6 +25,8 @@ namespace Maylib
 
             void SetInt(const std::string& name, s32 value, bool debug = false);
             void SetFloat(const std::string& name, float value, bool debug = false);
+            void SetVec3(const std::string& name, glm::vec3 value, bool debug = false);
+            void SetVec4(const std::string& name, glm::vec4 value, bool debug = false);
             void SetMat4(const std::string& name, glm::mat4 value, bool debug = false);
 
         private:

@@ -41,9 +41,9 @@ namespace Maylib
             m_indexBuffer.Unbind();
         }
 
-        void Mesh::Draw(Shader& shader)
+        void Mesh::Draw(Shader* shader)
         {
-            shader.Bind();
+            shader->Bind();
 
             u32 numDiffuse = 1;
             u32 numSpecular = 1;
@@ -51,23 +51,38 @@ namespace Maylib
             for (u32 i = 0; i < m_data.textures.size(); i++)
             {
                 std::string number;
-                std::string name = m_data.textures[i]->GetType();
+                std::string name;
+                TextureMapType type = m_data.textures[i]->GetType();
 
-                if (name == "diffuse")
-                    number = std::to_string(numDiffuse++);
-                else if (name == "specular")
-                    number = std::to_string(numSpecular++);
-                else
-                    LOG_WARN("Mesh::Draw(Shader&) - Unknown texture type %s", name.c_str());
+                switch (type)
+                {
+                    case TEXTURE_MAP_DIFFUSE:
+                    {
+                        name = "diffuse";
+                        number = std::to_string(numDiffuse++);
+                        break;
+                    }
+                    case TEXTURE_MAP_SPECULAR:
+                    {
+                        name = "specular";
+                        number = std::to_string(numSpecular++);
+                        break;
+                    }
+                    default:
+                    {
+                        LOG_WARN("Mesh::Draw(Shader&) - Unknown texture type %d", type);
+                        break;
+                    }
+                }
 
-                shader.SetInt(name + number, i, false);
+                shader->SetInt(name + number, i, false);
                 m_data.textures[i]->Bind(i);
             }
 
             m_vertexArray.Bind();
             glDrawElements(GL_TRIANGLES, m_data.indices.size(), GL_UNSIGNED_INT, 0);
             m_vertexArray.Unbind();
-            shader.Unbind();
+            shader->Unbind();
         }
     }
 }

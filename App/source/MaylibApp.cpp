@@ -1,4 +1,5 @@
 #include "MaylibApp.h"
+#include "glm/gtc/type_ptr.hpp"
 
 #include <Core/Application.h>
 #include <Core/AssetManager.h>
@@ -18,26 +19,32 @@
 using namespace Maylib::Core;
 using namespace Maylib::Graphics;
 
+static bool drawSkybox = true;
+static glm::vec3 lightPosition = glm::vec3(0.f);
+static glm::vec3 lightColor = glm::vec3(250.f / 255.f, 1.f, 204.f / 255.f);
+
 MaylibApp::MaylibApp(const AppInfo& info) : Application(info)
 {
-    this->SetClearColor(0.05f, 0.05f, 0.1f);
+    this->SetClearColor(0.01f, 0.01f, 0.01f);
+    this->SetPrimaryCamera(&m_camera);
 
-    ShaderSource shaderSource;
-    shaderSource.vertex = ReadFile("assets/shaders/basic_vertex.glsl");
-    shaderSource.fragment = ReadFile("assets/shaders/basic_fragment.glsl");
-    m_shader.Load(shaderSource);
+    AssetManager::AddShader("basic", "assets/shaders/basic_vertex.glsl", "assets/shaders/basic_fragment.glsl");
+    AssetManager::AddShader("skybox", "assets/shaders/skybox_vertex.glsl", "assets/shaders/skybox_fragment.glsl");
+    AssetManager::AddShader("lighting", "assets/shaders/lighting_vertex.glsl", "assets/shaders/lighting_fragment.glsl");
+    AssetManager::AddTexture("model_diffuse", "assets/textures/duck/diffuse.jpg", TEXTURE_MAP_DIFFUSE, true);
 
-    ShaderSource skyboxShaderSource;
-    skyboxShaderSource.vertex = ReadFile("assets/shaders/skybox_vertex.glsl");
-    skyboxShaderSource.fragment = ReadFile("assets/shaders/skybox_fragment.glsl");
-    m_skyboxShader.Load(skyboxShaderSource);
-
-    AssetManager::AddTexture("model_diffuse", "diffuse", "assets/textures/backpack/diffuse.jpg");
+    m_basicShader = AssetManager::GetShader("basic");
+    m_skyboxShader = AssetManager::GetShader("skybox");
+    m_lightingShader = AssetManager::GetShader("lighting");
     Texture* texture = AssetManager::GetTexture("model_diffuse");
 
     m_model.SetTexture(TEXTURE_MAP_DIFFUSE, texture);
+    m_model.SetPosition(0.f, 0.f, -3.f);
     m_model.SetRotation(0.f, 45.f, 0.f);
-    m_model.Load("assets/models/backpack.obj");
+    m_model.Load("assets/models/duck.obj");
+
+    m_lightCube.SetPosition(5.f, 0.f, 0.f);
+    m_lightCube.Load("assets/models/box.obj");
 
     std::string paths[6] = {
         "assets/textures/skybox/right.jpg",  "assets/textures/skybox/left.jpg",  "assets/textures/skybox/top.jpg",
@@ -55,25 +62,49 @@ void MaylibApp::OnUpdate()
     if (Input::IsKeyTyped(SDL_SCANCODE_E))
         this->ToggleDebug();
 
+    if (Input::IsKeyTyped(SDL_SCANCODE_F))
+        this->ToggleFullscreen();
+
     m_camera.Update();
 }
 
 void MaylibApp::OnRender()
 {
-    m_camera.CalculateMatrix(m_skyboxShader, true);
-    m_skybox.Draw(m_skyboxShader);
+    lightPosition = m_lightCube.GetPosition();
 
-    m_camera.CalculateMatrix(m_shader);
-    m_model.Draw(m_shader);
+    m_lightingShader->Bind();
+    m_lightingShader->SetVec3("lightPosition", lightPosition);
+    m_lightingShader->SetVec3("lightColor", lightColor);
+    m_lightingShader->SetVec3("camPosition", m_camera.GetPosition());
+    m_lightingShader->Unbind();
+
+    m_basicShader->Bind();
+    m_basicShader->SetVec3("lightPosition", lightPosition);
+    m_basicShader->SetVec3("lightColor", lightColor);
+    m_basicShader->Unbind();
+
+    if (drawSkybox)
+        m_skybox.Draw(m_skyboxShader);
+
+    m_model.Draw(m_basicShader);
+    m_lightCube.Draw(m_lightingShader);
 }
 
 void MaylibApp::OnUIRender()
 {
     ImGui::Begin("Debug Menu");
     {
-        ImGui::Button("Hello");
         ImGui::Text("FPS: %.3f", 1.f / Time::GetElapsed());
         ImGui::Text("Delta time: %f", Time::GetElapsed());
+        ImGui::Text("Cam position: " V3_FMT, V3_OPEN(m_camera.GetPosition()));
+        ImGui::Text("Cam rotation: " V3_FMT, V3_OPEN(m_camera.GetRotation()));
+
+        ImGui::Checkbox("Skybox? ", &drawSkybox);
+        ImGui::ColorPicker4("Light color", glm::value_ptr(lightColor));
+
+        ImGui::DragFloat3("Model position", glm::value_ptr(m_model.GetPosition()));
+        ImGui::DragFloat3("Model rotation", glm::value_ptr(m_model.GetRotation()));
+        ImGui::DragFloat3("Model scale", glm::value_ptr(m_model.GetScale()));
     }
     ImGui::End();
 }
