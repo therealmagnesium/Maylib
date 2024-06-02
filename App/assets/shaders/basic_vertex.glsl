@@ -10,7 +10,7 @@ out vec2 texCoord;
 out vec3 currentPosition;
 
 uniform mat4 modelMatrix;
-uniform mat4 camMatrix;
+uniform mat4 cameraMatrix;
 
 void main()
 {
@@ -19,5 +19,5 @@ void main()
     normal = aNormal;
 
     currentPosition = vec3(modelMatrix * vec4(position, 1.f));
-    gl_Position = camMatrix * vec4(currentPosition, 1.f);
+    gl_Position = cameraMatrix * vec4(currentPosition, 1.f);
 }

@@ -19,8 +19,10 @@ namespace Maylib
             inline glm::vec3& GetPosition() { return m_position; }
             inline glm::vec3& GetRotation() { return m_rotation; }
 
+            inline void SetPosition(float x, float y, float z) { m_position = glm::vec3(x, y, z); }
+
             void Update();
-            void CalculateMatrix(Shader* shader, bool convertView = false);
+            void CalculateMatrix(Shader* shader, glm::mat4 transformMatrix, bool convertView = false);
 
         private:
             void HandleKeyInputs();

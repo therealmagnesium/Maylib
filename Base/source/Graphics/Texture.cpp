@@ -20,7 +20,7 @@ namespace Maylib
 
         void Texture::Unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
 
-        void Texture::Load(const char* path, bool flip, bool alpha)
+        void Texture::Load(const char* path, bool flip)
         {
             this->Bind();
 
@@ -34,15 +34,31 @@ namespace Maylib
             if (!data)
                 LOG_WARN("Failed to load texture %s!", path);
 
-            if (!alpha)
+            switch (m_spec.channelCount)
             {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_spec.width, m_spec.height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-                glGenerateMipmap(GL_TEXTURE_2D);
-            }
-            else
-            {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_spec.width, m_spec.height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-                glGenerateMipmap(GL_TEXTURE_2D);
+                case 1:
+                {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_spec.width, m_spec.height, 0, GL_RED, GL_UNSIGNED_BYTE,
+                                 data);
+                    glGenerateMipmap(GL_TEXTURE_2D);
+                    break;
+                }
+
+                case 3:
+                {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_spec.width, m_spec.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                                 data);
+                    glGenerateMipmap(GL_TEXTURE_2D);
+                    break;
+                }
+
+                case 4:
+                {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_spec.width, m_spec.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                                 data);
+                    glGenerateMipmap(GL_TEXTURE_2D);
+                    break;
+                }
             }
 
             stbi_image_free(data);

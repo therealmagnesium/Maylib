@@ -4,9 +4,11 @@
 #include "Core/Base.h"
 #include "Core/Log.h"
 #include "Core/Vertex.h"
+#include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 
+#include <assimp/types.h>
 #include <cstring>
 #include <string>
 
@@ -30,6 +32,15 @@ namespace Maylib
             m_transform.scale = glm::vec3(1.f);
 
             this->SetupMatrix();
+        }
+
+        Model::~Model()
+        {
+            for (Mesh* mesh : m_meshes)
+                delete mesh;
+
+            for (Material* material : m_materials)
+                delete material;
         }
 
         void Model::Load(const char* path)
@@ -56,8 +67,11 @@ namespace Maylib
             {
                 Camera* camera = Application::Get()->GetPrimaryCamera();
                 assert(camera);
-                camera->CalculateMatrix(shader);
+                camera->CalculateMatrix(shader, m_modelMatrix);
             }
+
+            for (Material* material : m_materials)
+                material->UpdateUniforms(shader);
 
             shader->Bind();
             shader->SetMat4("modelMatrix", m_modelMatrix);
@@ -65,18 +79,6 @@ namespace Maylib
 
             for (u32 i = 0; i < m_meshes.size(); i++)
                 m_meshes[i]->Draw(shader);
-        }
-
-        void Model::SetTexture(TextureMapType type, Texture* texture)
-        {
-            if (!texture)
-            {
-                LOG_ERROR("Model::SetDiffuseTexture() - Cannot set diffuse texture because it's null");
-                return;
-            }
-
-            m_textureMaps[type] = texture;
-            m_loadedTextureMaps[type] = true;
         }
 
         void Model::ProcessNode(aiNode* node, const aiScene* scene)
@@ -135,10 +137,63 @@ namespace Maylib
                     meshData.indices.push_back(face.mIndices[j]);
             }
 
-            for (u32 i = 0; i < TEXTURE_MAP_COUNT; i++)
+            for (u32 i = 0; i < scene->mNumMaterials; i++)
             {
-                if (m_loadedTextureMaps[i])
-                    meshData.textures.push_back(m_textureMaps[i]);
+                const aiMaterial* aiMaterial = scene->mMaterials[i];
+                Material* material = new Material();
+
+                aiColor3D ambientColor(0.f, 0.f, 0.f);
+                aiColor3D diffuseColor(0.f, 0.f, 0.f);
+                aiColor3D specularColor(0.f, 0.f, 0.f);
+
+                if (aiMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+                {
+                    aiString path;
+
+                    if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
+                    {
+                        std::string p(path.data);
+                        std::string name = aiMaterial->GetName().C_Str() + std::string("_diffuse");
+
+                        AssetManager::AddTexture(name.c_str(), p.c_str(), TEXTURE_MAP_DIFFUSE, true);
+                        Texture* texture = AssetManager::GetTexture(name.c_str());
+                        material->SetTexture(TEXTURE_MAP_DIFFUSE, texture);
+
+                        meshData.textures.push_back(texture);
+
+                        // LOG_INFO("%s, %s", name.c_str(), p.c_str());
+                    }
+                }
+
+                if (aiMaterial->GetTextureCount(aiTextureType_SHININESS) > 0)
+                {
+                    aiString path;
+
+                    if (aiMaterial->GetTexture(aiTextureType_SHININESS, 0, &path) == AI_SUCCESS)
+                    {
+                        std::string p(path.data);
+                        std::string name = aiMaterial->GetName().C_Str() + std::string("_specular");
+
+                        AssetManager::AddTexture(name.c_str(), p.c_str(), TEXTURE_MAP_SPECULAR, true);
+                        Texture* texture = AssetManager::GetTexture(name.c_str());
+                        material->SetTexture(TEXTURE_MAP_SPECULAR, texture);
+
+                        meshData.textures.push_back(texture);
+
+                        // LOG_INFO("%s, %s", name.c_str(), p.c_str());
+                    }
+                }
+
+                if (aiMaterial->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor) == AI_SUCCESS)
+                    material->SetAmbientColor(ambientColor.r, ambientColor.g, ambientColor.b);
+
+                if (aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == AI_SUCCESS)
+                    material->SetDiffuseColor(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+
+                if (aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == AI_SUCCESS)
+                    material->SetSpecularColor(specularColor.r, specularColor.g, specularColor.b);
+
+                m_materials.push_back(material);
             }
 
             return new Mesh(meshData);

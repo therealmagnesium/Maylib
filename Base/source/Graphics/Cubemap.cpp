@@ -56,7 +56,7 @@ namespace Maylib
         {
             Camera* camera = Application::Get()->GetPrimaryCamera();
             assert(camera);
-            camera->CalculateMatrix(shader, true);
+            camera->CalculateMatrix(shader, m_cube.GetModelMatrix(), true);
 
             glDepthMask(false);
             shader->Bind();

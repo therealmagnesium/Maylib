@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Math.h"
+#include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"
@@ -19,10 +20,12 @@ namespace Maylib
         {
         public:
             Model();
+            ~Model();
 
             inline glm::vec3& GetPosition() { return m_transform.position; }
             inline glm::vec3& GetRotation() { return m_transform.rotation; }
             inline glm::vec3& GetScale() { return m_transform.scale; }
+            inline glm::mat4& GetModelMatrix() { return m_modelMatrix; }
 
             void SetPosition(float x, float y, float z);
             void SetRotation(float x, float y, float z);
@@ -30,7 +33,6 @@ namespace Maylib
 
             void Load(const char* path);
             void Draw(Shader* shader, bool skybox = false);
-            void SetTexture(TextureMapType type, Texture* texture);
 
         private:
             void SetupMatrix();
@@ -42,8 +44,7 @@ namespace Maylib
             glm::mat4 m_modelMatrix;
 
             std::vector<Mesh*> m_meshes;
-            Texture* m_textureMaps[TEXTURE_MAP_COUNT]{};
-            bool m_loadedTextureMaps[TEXTURE_MAP_COUNT]{};
+            std::vector<Material*> m_materials;
         };
     }
 }

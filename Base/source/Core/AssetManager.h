@@ -18,8 +18,7 @@ namespace Maylib
             static Texture* GetTexture(const char* name);
             static Shader* GetShader(const char* name);
 
-            static void AddTexture(const char* name, const char* path, TextureMapType type, bool flip = false,
-                                   bool alpha = false);
+            static void AddTexture(const char* name, const char* path, TextureMapType type, bool flip = false);
             static void AddShader(const char* name, const char* vertexPath, const char* fragmentPath);
 
             static void Clean();

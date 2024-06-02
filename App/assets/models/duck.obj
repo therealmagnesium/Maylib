@@ -1,5 +1,6 @@
 # Blender v3.0.1 OBJ File: 'duck.blend'
 # www.blender.org
+mtllib duck.mtl
 o rubber_duck_toy_rubberduck
 v 0.086463 1.675737 1.002841
 v 0.113719 1.700281 1.055609
@@ -6789,6 +6790,7 @@ vn -0.8707 0.0573 -0.4885
 vn -0.6047 0.3743 -0.7030
 vn -0.0000 0.3752 -0.9269
 vn 0.0000 -0.7919 -0.6107
+usemtl duck
 s 1
 f 1/1/1 2/2/2 3/3/3
 f 4/4/4 5/5/5 2/2/2

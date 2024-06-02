@@ -17,7 +17,7 @@ namespace Maylib
         Texture* AssetManager::GetTexture(const char* name) { return s_textures[name].get(); }
         Shader* AssetManager::GetShader(const char* name) { return s_shaders[name].get(); }
 
-        void AssetManager::AddTexture(const char* name, const char* path, TextureMapType type, bool flip, bool alpha)
+        void AssetManager::AddTexture(const char* name, const char* path, TextureMapType type, bool flip)
         {
             if (s_textures.find(name) != s_textures.end())
             {
@@ -27,7 +27,7 @@ namespace Maylib
 
             Ref<Texture> texture = CreateRef<Texture>();
             texture->SetType(type);
-            texture->Load(path, flip, alpha);
+            texture->Load(path, flip);
 
             if (!texture)
             {

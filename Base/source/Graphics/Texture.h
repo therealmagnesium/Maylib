@@ -31,7 +31,7 @@ namespace Maylib
 
             void Bind(u8 slot = 0);
             void Unbind();
-            void Load(const char* path, bool flip = false, bool alpha = false);
+            void Load(const char* path, bool flip = false);
 
         private:
             u32 m_id;

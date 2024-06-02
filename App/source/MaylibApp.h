@@ -4,6 +4,7 @@
 
 #include <Graphics/Camera.h>
 #include <Graphics/Cubemap.h>
+#include <Graphics/Light.h>
 #include <Graphics/Mesh.h>
 #include <Graphics/Model.h>
 #include <Graphics/Shader.h>
@@ -25,6 +26,7 @@ private:
     Model m_model;
     Model m_lightCube;
 
+    DirectionalLight m_light;
     Cubemap m_skybox;
 
     Shader* m_skyboxShader;

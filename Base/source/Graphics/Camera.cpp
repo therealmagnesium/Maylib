@@ -5,6 +5,8 @@
 #include "Core/Log.h"
 #include "Graphics/Shader.h"
 #include "Core/Time.h"
+#include "glm/ext/vector_float4.hpp"
+#include "glm/matrix.hpp"
 
 #include <SDL2/SDL_mouse.h>
 #include <cmath>
@@ -33,7 +35,7 @@ namespace Maylib
             AppInfo& appInfo = app->GetInfo();
             aspect = (float)appInfo.screenWidth / appInfo.screenHeight;
 
-            m_position = glm::vec3(0.f, 0.f, 5.f);
+            m_position = glm::vec3(0.f, 0.f, 0.f);
             m_up = glm::vec3(0.f, 1.f, 0.f);
             m_orientation = glm::vec3(0.f, 0.f, -1.f);
 
@@ -41,18 +43,32 @@ namespace Maylib
             m_projection = glm::mat4(1.f);
         }
 
-        void Camera::CalculateMatrix(Shader* shader, bool convertView)
+        void Camera::CalculateMatrix(Shader* shader, glm::mat4 transformMatrix, bool convertView)
         {
+            glm::vec3 cameraLocalPosition3f = glm::vec3(0.f);
+
             shader->Bind();
 
-            if (convertView)
-                m_view = glm::mat4(glm::mat3(glm::lookAt(m_position, m_position + m_orientation, m_up)));
-            else
+            if (!convertView)
+            {
                 m_view = glm::lookAt(m_position, m_position + m_orientation, m_up);
+
+                glm::mat4 cameraToLocalTransformation = glm::mat4(1.f);
+                cameraToLocalTransformation = glm::transpose(transformMatrix);
+
+                glm::vec4 cameraWorldPosition = glm::vec4(m_position, 1.f);
+                glm::vec4 cameraLocalPosition = cameraToLocalTransformation * cameraWorldPosition;
+                cameraLocalPosition3f = glm::vec3(cameraLocalPosition);
+            }
+            else
+            {
+                m_view = glm::mat4(glm::mat3(glm::lookAt(m_position, m_position + m_orientation, m_up)));
+            }
 
             m_projection = glm::perspective(glm::radians(45.f), aspect, 0.1f, 1000.f);
 
-            shader->SetMat4("camMatrix", m_projection * m_view, true);
+            shader->SetVec3("cameraPosition", cameraLocalPosition3f);
+            shader->SetMat4("cameraMatrix", m_projection * m_view);
 
             shader->Unbind();
         }
