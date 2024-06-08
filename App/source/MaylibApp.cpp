@@ -1,12 +1,12 @@
 #include "MaylibApp.h"
-#include "Core/Math.h"
-#include "glm/gtc/type_ptr.hpp"
 
 #include <Core/Application.h>
 #include <Core/AssetManager.h>
 #include <Core/Base.h>
 #include <Core/Input.h>
+#include <Graphics/Light.h>
 #include <Core/Log.h>
+#include <Core/Math.h>
 #include <Core/Time.h>
 #include <Core/Vertex.h>
 #include <Core/VertexArray.h>
@@ -16,12 +16,12 @@
 #include <SDL2/SDL_scancode.h>
 #include <imgui.h>
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace Maylib::Core;
 using namespace Maylib::Graphics;
 
 static bool drawSkybox = true;
-static glm::vec3 lightDirection = glm::vec3(1.f, 0.f, 0.f);
 
 MaylibApp::MaylibApp(const AppInfo& info) : Application(info)
 {
@@ -38,7 +38,11 @@ MaylibApp::MaylibApp(const AppInfo& info) : Application(info)
     m_skyboxShader = AssetManager::GetShader("skybox");
     m_lightingShader = AssetManager::GetShader("lighting");
 
-    m_light.SetWorldDirection(V3_OPEN(lightDirection));
+    m_pointLight.SetPosition(1.f, 1.f, 1.f);
+    m_pointLight.SetColor(1.f, 0.f, 0.f);
+
+    m_pointLight2.SetPosition(-1.f, 1.f, -1.f);
+    m_pointLight2.SetColor(0.f, 0.f, 1.f);
 
     m_model.SetPosition(0.f, 0.f, 0.f);
     m_model.SetRotation(0.f, 45.f, 0.f);
@@ -66,13 +70,14 @@ void MaylibApp::OnUpdate()
 
     m_camera.Update();
 
-    m_light.SetWorldDirection(V3_OPEN(lightDirection));
-    m_light.CalculateLocalDirection(m_model);
+    m_pointLight.CalculateLocalPosition(m_model);
+    m_pointLight2.CalculateLocalPosition(m_model);
 }
 
 void MaylibApp::OnRender()
 {
-    m_light.UpdateUniforms(m_basicShader);
+    m_pointLight.UpdateUniforms(m_basicShader);
+    m_pointLight2.UpdateUniforms(m_basicShader);
 
     if (drawSkybox)
         m_skybox.Draw(m_skyboxShader);
@@ -90,12 +95,16 @@ void MaylibApp::OnUIRender()
         ImGui::Text("Cam rotation: " V3_FMT, V3_OPEN(m_camera.GetRotation()));
 
         ImGui::Checkbox("Skybox? ", &drawSkybox);
-        ImGui::ColorPicker3("Light color", glm::value_ptr(m_light.GetColor()));
 
-        ImGui::DragFloat3("Light direction", glm::value_ptr(lightDirection));
-        ImGui::DragFloat3("Model position", glm::value_ptr(m_model.GetPosition()));
-        ImGui::DragFloat3("Model rotation", glm::value_ptr(m_model.GetRotation()));
-        ImGui::DragFloat3("Model scale", glm::value_ptr(m_model.GetScale()));
+        ImGui::ColorEdit3("Point light color", glm::value_ptr(m_pointLight.GetColor()));
+        ImGui::DragFloat3("Point light position", glm::value_ptr(m_pointLight.GetPosition()), 0.5f);
+
+        ImGui::ColorEdit3("Point light2 color", glm::value_ptr(m_pointLight2.GetColor()));
+        ImGui::DragFloat3("Point light2 position", glm::value_ptr(m_pointLight2.GetPosition()), 0.5f);
+
+        ImGui::DragFloat3("Model position", glm::value_ptr(m_model.GetPosition()), 0.5f);
+        ImGui::DragFloat3("Model rotation", glm::value_ptr(m_model.GetRotation()), 0.5f);
+        ImGui::DragFloat3("Model scale", glm::value_ptr(m_model.GetScale()), 0.5f);
     }
     ImGui::End();
 }

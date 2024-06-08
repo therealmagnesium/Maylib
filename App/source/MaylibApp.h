@@ -23,15 +23,16 @@ public:
     void OnUIRender() override;
 
 private:
+    Camera m_camera;
+
     Model m_model;
     Model m_lightCube;
 
-    DirectionalLight m_light;
     Cubemap m_skybox;
+    PointLight m_pointLight;
+    PointLight m_pointLight2;
 
     Shader* m_skyboxShader;
     Shader* m_basicShader;
     Shader* m_lightingShader;
-
-    Camera m_camera;
 };
